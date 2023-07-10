@@ -1,0 +1,9 @@
+<app-header (loadComponent)="navigate($event)"></app-header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <app-recipes *ngIf="loaddedComponent === 'Recipe'"></app-recipes>
+      <app-shopping-list *ngIf="loaddedComponent === 'Shopping-list'"></app-shopping-list>
+    </div>
+  </div>
+</div>
