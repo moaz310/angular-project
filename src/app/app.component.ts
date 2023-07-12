@@ -6,8 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  loaddedComponent = 'Recipe';
-  navigate(event: string) {
-    this.loaddedComponent = event;
-  }
 }
