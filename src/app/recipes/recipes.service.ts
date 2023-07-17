@@ -2,20 +2,21 @@ import { Injectable } from '@angular/core';
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
-import { Subject, map, tap } from 'rxjs';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Subject, map, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../auth/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipesService {
   private url: string = 'https://angular-bebc0-default-rtdb.firebaseio.com/recipes.json'
-
   private recipes: Recipe[] = [];
 
   recipesSubject: Subject<Recipe[]> = new Subject<Recipe[]>;
   constructor(private shoppingService: ShoppingListService,
-              private http: HttpClient) { 
+              private http: HttpClient) {
   }
 
   saveRecipes(){
@@ -30,15 +31,15 @@ export class RecipesService {
   }
 
   fetchRecipes(){
-    return this.http.get(
+    return this.http.get<Recipe[]>(
       this.url
-    ).pipe(map((recipes: Recipe[])=>{
+    ).pipe(map((recipes)=>{
       return recipes.map((recipe)=>{
         return {...recipe, ingrediants: recipe.ingrediants === undefined ? [] : recipe.ingrediants};
       })
     }),
     tap(
-      (data: Recipe[])=>{
+      (data)=>{
         this.recipes = data;
         this.recipesSubject.next(this.recipes);
       }
@@ -61,9 +62,6 @@ export class RecipesService {
   addRecipe(recipe: Recipe) {
     this.recipes.push(recipe);
     this.recipesSubject.next(this.recipes.slice());
-    /**this.http.put(
-      this.url,
-      [recipe]).subscribe();**/
   }
 
   deleteRecipe(id: number){
