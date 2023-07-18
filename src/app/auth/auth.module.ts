@@ -13,7 +13,7 @@ import { AuthGuard } from "./auth.guard";
         SharedModule,
         ReactiveFormsModule,
         RouterModule.forChild([
-            {path: '', component: AuthComponent}
+            {path: '', component: AuthComponent, canActivate: [AuthGuard]}
         ])
     ]
 })
